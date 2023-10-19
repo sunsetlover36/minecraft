@@ -1,5 +1,7 @@
-import { Material, Vector3 } from 'three';
+import { BoxGeometry, Texture, Vector3 } from 'three';
+
 import { BLOCK_BOTTOM_SIDE_INDEX, BLOCK_TOP_SIDE_INDEX } from './constants';
+import { Grass } from '../blocks/Grass';
 
 interface BlockTransformation {
   position: Vector3;
@@ -44,11 +46,11 @@ export const getBlockTransformation = (index: number): BlockTransformation => {
 };
 
 interface BlockMaterials {
-  side: Material;
-  bottom: Material;
-  top: Material;
+  side: Texture;
+  bottom: Texture;
+  top: Texture;
 }
-export const getBlockMaterial = (index: number, materials: BlockMaterials) => {
+export const getBlockTexture = (index: number, materials: BlockMaterials) => {
   const { side, bottom, top } = materials;
   switch (index) {
     case BLOCK_BOTTOM_SIDE_INDEX:
@@ -58,4 +60,13 @@ export const getBlockMaterial = (index: number, materials: BlockMaterials) => {
     default:
       return side;
   }
+};
+
+export const boxGeometry = new BoxGeometry();
+
+export enum BlockNames {
+  GRASS = 'Grass',
+}
+export const BLOCKS = {
+  [BlockNames.GRASS]: Grass,
 };
