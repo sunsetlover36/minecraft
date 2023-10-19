@@ -38,7 +38,9 @@ export const Player = () => {
         z: direction.z,
       });
 
-      const ray = world.castRay(new rapier.Ray(origin, { x: 0, y: -1, z: 0 }));
+      const ray = (world as any).castRay(
+        new rapier.Ray(origin, { x: 0, y: -1, z: 0 })
+      );
       const grounded = ray && ray.collider && ray.toi <= 0.03;
       if (jump && grounded) {
         playerRef.current.setLinvel({ x: 0, y: 5, z: 0 });

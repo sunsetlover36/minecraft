@@ -1,6 +1,11 @@
 import { useRef, useState, useCallback } from 'react';
 import { Texture, Vector3 } from 'three';
-import { useFrame, type GroupProps, type MeshProps } from '@react-three/fiber';
+import {
+  useFrame,
+  type GroupProps,
+  type MeshProps,
+  ThreeEvent,
+} from '@react-three/fiber';
 
 import { type BlockSounds, ToolNames } from '../types';
 import { destroyStages } from '../textures';
@@ -35,42 +40,43 @@ export const BreakableBlock = (props: BreakableBlockProps) => {
 
   const Block = BLOCKS[blockName];
 
-  const onPointerMove = useCallback((e) => {
+  const onPointerMove = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHover(true);
   }, []);
-  const onPointerOut = useCallback((e) => {
+  const onPointerOut = useCallback(() => {
     setHover(false);
     breakingTime.current = 0;
   }, []);
-  const onContextMenu = useCallback((e) => {
-    e.nativeEvent.preventDefault();
-    e.stopPropagation();
+  const onContextMenu = useCallback((e: ThreeEvent<MouseEvent>) => {
+    if (e.faceIndex) {
+      e.nativeEvent.preventDefault();
+      e.stopPropagation();
 
-    const { place: placeSound } = sounds;
-    if (placeSound) {
-      placeSound.currentTime = 0;
-      placeSound.play();
+      const { place: placeSound } = sounds;
+      if (placeSound) {
+        placeSound.currentTime = 0;
+        placeSound.play();
+      }
+
+      const { x, y, z } = (blockRef.current as any).translation();
+
+      const dir = [
+        [x + 1, y, z],
+        [x - 1, y, z],
+        [x, y + 1, z],
+        [x, y - 1, z],
+        [x, y, z + 1],
+        [x, y, z - 1],
+      ];
+      addBlock(new Vector3(...dir[Math.floor(e.faceIndex / 2)]));
     }
-
-    const { x, y, z } = blockRef.current.translation();
-
-    const dir = [
-      [x + 1, y, z],
-      [x - 1, y, z],
-      [x, y + 1, z],
-      [x, y - 1, z],
-      [x, y, z + 1],
-      [x, y, z - 1],
-    ];
-
-    addBlock(new Vector3(...dir[Math.floor(e.faceIndex / 2)]));
   }, []);
-  const onPointerUp = useCallback((e) => {
+  const onPointerUp = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     breakingTime.current = 0;
   }, []);
-  const onPointerDown = useCallback((e) => {
+  const onPointerDown = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     breakingTime.current = Date.now();
   }, []);

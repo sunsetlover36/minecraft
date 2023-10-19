@@ -1,6 +1,5 @@
 import {
   KeyboardControls,
-  OrbitControls,
   PointerLockControls,
   Sky,
   Text3D,
@@ -41,7 +40,6 @@ export const App = () => {
           >
             <Sky />
             <Perf position="top-left" />
-            {/* <OrbitControls makeDefault /> */}
 
             <ambientLight intensity={1} />
 
