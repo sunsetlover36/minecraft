@@ -15,7 +15,7 @@ import { Suspense } from 'react';
 const calmSoundtrack = new Audio('/calm1.mp3');
 export const App = () => {
   const playMusic = () => {
-    // calmSoundtrack.play();
+    calmSoundtrack.play();
   };
   return (
     <main>
