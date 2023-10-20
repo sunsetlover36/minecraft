@@ -58,7 +58,7 @@ export const Player = () => {
       enabledRotations={[false, false, false]}
       canSleep={false}
     >
-      <CapsuleCollider args={[0.75, 0.75]} />
+      <CapsuleCollider args={[1, 0.5]} />
     </RigidBody>
   );
 };
